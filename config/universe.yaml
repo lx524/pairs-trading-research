@@ -1,0 +1,33 @@
+tickers:
+  - SPY
+  - IVV
+  - VOO
+  - QQQ
+  - IWM
+  - TLT
+  - IEF
+  - GLD
+  - SLV
+  - XLE
+  - USO
+  - XLK
+  - XLF
+  - XLV
+  - XLI
+  - XLY
+  - XLP
+  - XLU
+  - XLB
+
+sanity_check_pairs:
+  - [SPY, IVV]
+  - [SPY, VOO]
+
+showcase_pairs:
+  - [TLT, IEF]
+  - [GLD, SLV]
+  - [XLK, QQQ]
+  - [XLE, USO]
+  - [XLF, IWM]
+
+recommended_first_pair: [TLT, IEF]

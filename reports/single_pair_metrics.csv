@@ -1,0 +1,13 @@
+metric,value
+cumulative_return,5.83%
+annualized_return,0.50%
+annualized_volatility,1.58%
+sharpe_ratio,0.3167
+max_drawdown,-3.86%
+number_of_trades,74
+hit_rate,62.16%
+average_holding_period,14.5676
+turnover,0.1359
+gross_return,8.22%
+net_return,5.83%
+total_transaction_costs,2.24%

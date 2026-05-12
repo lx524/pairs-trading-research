@@ -1,0 +1,23 @@
+start: "2015-01-01"
+end: null
+
+pair_selection:
+  min_corr: 0.75
+  max_coint_pvalue: 0.05
+  max_adf_pvalue: 0.05
+  max_half_life: 60
+
+signals:
+  lookback: 60
+  entry_z: 2.0
+  exit_z: 0.5
+  stop_z: 3.5
+  max_holding_days: 30
+
+costs:
+  commission_bps: 0.5
+  slippage_bps: 1.0
+
+walk_forward:
+  train_days: 504
+  test_days: 126
