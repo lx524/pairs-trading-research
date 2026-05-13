@@ -122,7 +122,7 @@ notebooks/02_walk_forward_results.ipynb
 
 Reusable logic lives in `src/pairs_trading`.
 
-## Interview Talking Points
+<!-- ## Interview Talking Points
 
 - Correlation is not enough because two assets can move together without their price spread being mean-reverting.
 - Cointegration means a linear combination of two non-stationary price series may be stationary.
@@ -133,7 +133,7 @@ Reusable logic lives in `src/pairs_trading`.
 - Walk-forward validation tests whether relationships persist out of sample.
 - Transaction costs and slippage can turn attractive gross results into weak or negative net results.
 - Failure cases reveal regime changes, unstable relationships, and overfitting risk.
-- This is a research pipeline, not a production trading system.
+- This is a research pipeline, not a production trading system. -->
 
 ## Stretch Goals
 
@@ -144,7 +144,7 @@ Reusable logic lives in `src/pairs_trading`.
 - Parameter sensitivity analysis.
 - Dashboard.
 
-## Out Of Scope
+<!-- ## Out Of Scope
 
 - Databases.
 - APIs.
@@ -152,4 +152,4 @@ Reusable logic lives in `src/pairs_trading`.
 - Live trading.
 - Intraday execution.
 - Broker integration.
-- Production risk system.
+- Production risk system. -->
