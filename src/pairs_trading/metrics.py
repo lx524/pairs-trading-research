@@ -1,10 +1,8 @@
-from __future__ import annotations
-
 import numpy as np
 import pandas as pd
 
 
-def max_drawdown(equity: pd.Series) -> float:
+def max_drawdown(equity):
     if equity.empty:
         return float("nan")
     running_max = equity.cummax()
@@ -13,11 +11,11 @@ def max_drawdown(equity: pd.Series) -> float:
 
 
 def performance_summary(
-    returns: pd.Series,
-    trades: pd.DataFrame | None = None,
-    positions: pd.DataFrame | pd.Series | None = None,
-    periods_per_year: int = 252,
-) -> dict:
+    returns,
+    trades=None,
+    positions=None,
+    periods_per_year=252,
+):
     returns = returns.dropna()
     equity = (1.0 + returns).cumprod()
     cumulative = float(equity.iloc[-1] - 1.0) if not equity.empty else float("nan")

@@ -1,10 +1,8 @@
-from __future__ import annotations
-
 import numpy as np
 import pandas as pd
 
 
-def extract_close(raw: pd.DataFrame) -> pd.DataFrame:
+def extract_close(raw):
     """Extract adjusted Close prices from yfinance output.
 
     With auto_adjust=True, yfinance's Close field is adjusted for splits and
@@ -32,7 +30,7 @@ def extract_close(raw: pd.DataFrame) -> pd.DataFrame:
     return close
 
 
-def align_prices(prices: pd.DataFrame, min_obs: int = 500) -> pd.DataFrame:
+def align_prices(prices, min_obs=500):
     clean = prices.copy()
     clean.index = pd.to_datetime(clean.index)
     clean = clean.sort_index()
@@ -44,13 +42,13 @@ def align_prices(prices: pd.DataFrame, min_obs: int = 500) -> pd.DataFrame:
     return clean
 
 
-def simple_returns(prices: pd.DataFrame) -> pd.DataFrame:
+def simple_returns(prices):
     return prices.pct_change(fill_method=None).dropna(how="all")
 
 
-def log_prices(prices: pd.DataFrame) -> pd.DataFrame:
+def log_prices(prices):
     return np.log(prices)
 
 
-def log_returns(prices: pd.DataFrame) -> pd.DataFrame:
+def log_returns(prices):
     return log_prices(prices).diff().dropna(how="all")

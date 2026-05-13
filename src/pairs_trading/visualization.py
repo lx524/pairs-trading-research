@@ -1,12 +1,10 @@
-from __future__ import annotations
-
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import pandas as pd
 
 
-def _prepare_path(path: str | Path | None) -> Path | None:
+def _prepare_path(path):
     if path is None:
         return None
     out = Path(path)
@@ -14,14 +12,14 @@ def _prepare_path(path: str | Path | None) -> Path | None:
     return out
 
 
-def _finish(fig, path: str | Path | None):
+def _finish(fig, path):
     out = _prepare_path(path)
     if out is not None:
         fig.savefig(out, bbox_inches="tight", dpi=150)
     return fig
 
 
-def plot_pair_prices(prices: pd.DataFrame, y: str, x: str, path: str | Path | None = None):
+def plot_pair_prices(prices, y, x, path=None):
     fig, ax = plt.subplots(figsize=(10, 5))
     normalized = prices[[y, x]].dropna() / prices[[y, x]].dropna().iloc[0]
     normalized.plot(ax=ax)
@@ -31,7 +29,7 @@ def plot_pair_prices(prices: pd.DataFrame, y: str, x: str, path: str | Path | No
     return _finish(fig, path)
 
 
-def plot_spread(spread: pd.Series, path: str | Path | None = None):
+def plot_spread(spread, path=None):
     fig, ax = plt.subplots(figsize=(10, 4))
     spread.plot(ax=ax, label="Spread")
     spread.rolling(60).mean().plot(ax=ax, label="60D mean")
@@ -41,7 +39,7 @@ def plot_spread(spread: pd.Series, path: str | Path | None = None):
     return _finish(fig, path)
 
 
-def plot_zscore(zscore: pd.Series, path: str | Path | None = None):
+def plot_zscore(zscore, path=None):
     fig, ax = plt.subplots(figsize=(10, 4))
     zscore.plot(ax=ax, label="Z-score")
     for level in (-2.0, -0.5, 0.5, 2.0):
@@ -52,7 +50,7 @@ def plot_zscore(zscore: pd.Series, path: str | Path | None = None):
     return _finish(fig, path)
 
 
-def plot_equity_curve(equity: pd.Series, path: str | Path | None = None):
+def plot_equity_curve(equity, path=None):
     fig, ax = plt.subplots(figsize=(10, 4))
     equity.plot(ax=ax)
     ax.set_title("Net Equity Curve")
@@ -61,7 +59,7 @@ def plot_equity_curve(equity: pd.Series, path: str | Path | None = None):
     return _finish(fig, path)
 
 
-def plot_gross_vs_net(gross_equity: pd.Series, net_equity: pd.Series, path: str | Path | None = None):
+def plot_gross_vs_net(gross_equity, net_equity, path=None):
     fig, ax = plt.subplots(figsize=(10, 4))
     gross_equity.plot(ax=ax, label="Gross")
     net_equity.plot(ax=ax, label="Net after costs")
@@ -72,7 +70,7 @@ def plot_gross_vs_net(gross_equity: pd.Series, net_equity: pd.Series, path: str 
     return _finish(fig, path)
 
 
-def plot_drawdown(equity: pd.Series, path: str | Path | None = None):
+def plot_drawdown(equity, path=None):
     running_max = equity.cummax()
     drawdown = equity / running_max - 1.0
     fig, ax = plt.subplots(figsize=(10, 4))
@@ -83,7 +81,7 @@ def plot_drawdown(equity: pd.Series, path: str | Path | None = None):
     return _finish(fig, path)
 
 
-def plot_selected_pairs_table(selected_pairs: pd.DataFrame, path: str | Path | None = None):
+def plot_selected_pairs_table(selected_pairs, path=None):
     display_cols = [
         col
         for col in ["train_start", "train_end", "test_start", "test_end", "pair", "coint_pvalue", "adf_pvalue", "test_return"]

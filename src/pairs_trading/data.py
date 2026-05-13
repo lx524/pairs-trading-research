@@ -1,21 +1,15 @@
-from __future__ import annotations
-
 from pathlib import Path
 
 import pandas as pd
+import yfinance as yf
 
 
-def download_prices(tickers: list[str], start: str, end: str | None = None) -> pd.DataFrame:
+def download_prices(tickers, start, end=None):
     """Download adjusted ETF OHLCV data from yfinance.
 
     yfinance is called with auto_adjust=True, so the returned Close column is
     adjusted for splits and dividends.
     """
-    try:
-        import yfinance as yf
-    except ImportError as exc:
-        raise ImportError("Install yfinance to download market data.") from exc
-
     raw = yf.download(
         tickers=tickers,
         start=start,
@@ -29,13 +23,13 @@ def download_prices(tickers: list[str], start: str, end: str | None = None) -> p
     return raw
 
 
-def save_prices(prices: pd.DataFrame, path: str | Path) -> None:
+def save_prices(prices, path):
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     prices.to_csv(path, index=True)
 
 
-def load_prices(path: str | Path) -> pd.DataFrame:
+def load_prices(path):
     prices = pd.read_csv(path, index_col=0, parse_dates=True)
     prices.index.name = "Date"
     return prices.sort_index()

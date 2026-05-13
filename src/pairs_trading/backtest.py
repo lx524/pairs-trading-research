@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import pandas as pd
 import numpy as np
 
@@ -9,7 +7,7 @@ from pairs_trading.signals import generate_positions, rolling_zscore
 from pairs_trading.statistics import construct_spread
 
 
-def _pair_weights(position: pd.Series, beta: float) -> pd.DataFrame:
+def _pair_weights(position, beta):
     gross = 1.0 + abs(beta)
     weights = pd.DataFrame(index=position.index)
     weights["y_weight"] = position / gross
@@ -17,11 +15,11 @@ def _pair_weights(position: pd.Series, beta: float) -> pd.DataFrame:
     return weights
 
 
-def _build_trades(position: pd.Series, returns: pd.Series) -> pd.DataFrame:
+def _build_trades(position, returns):
     trades = []
     open_date = None
     open_side = 0
-    pnl_parts: list[float] = []
+    pnl_parts = []
 
     for date, side in position.items():
         prev_side = open_side
@@ -63,16 +61,16 @@ def _build_trades(position: pd.Series, returns: pd.Series) -> pd.DataFrame:
 
 
 def backtest_pair(
-    prices: pd.DataFrame,
-    y: str,
-    x: str,
-    alpha: float,
-    beta: float,
-    signal_config: dict,
-    cost_bps: float,
-    slippage_bps: float,
-    signal_start: pd.Timestamp | None = None,
-) -> dict:
+    prices,
+    y,
+    x,
+    alpha,
+    beta,
+    signal_config,
+    cost_bps,
+    slippage_bps,
+    signal_start=None,
+):
     pair_prices = prices[[y, x]].dropna()
     spread = construct_spread(np.log(pair_prices[y]), np.log(pair_prices[x]), alpha, beta)
     zscore = rolling_zscore(spread, int(signal_config.get("lookback", 60)))
@@ -130,7 +128,7 @@ def backtest_pair(
     }
 
 
-def make_walk_forward_windows(prices: pd.DataFrame, train_days: int, test_days: int) -> list[tuple[pd.Timestamp, pd.Timestamp, pd.Timestamp, pd.Timestamp]]:
+def make_walk_forward_windows(prices, train_days, test_days):
     windows = []
     dates = prices.index
     start = 0
@@ -144,7 +142,7 @@ def make_walk_forward_windows(prices: pd.DataFrame, train_days: int, test_days: 
     return windows
 
 
-def walk_forward_one_pair(prices: pd.DataFrame, config: dict) -> dict:
+def walk_forward_one_pair(prices, config):
     from pairs_trading import pair_selection
 
     train_days = int(config.get("train_days", config.get("walk_forward", {}).get("train_days", 504)))

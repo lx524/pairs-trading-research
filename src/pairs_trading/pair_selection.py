@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from itertools import combinations
 
 import numpy as np
@@ -15,16 +13,16 @@ from pairs_trading.statistics import (
 )
 
 
-def candidate_pairs(tickers: list[str]) -> list[tuple[str, str]]:
+def candidate_pairs(tickers):
     return list(combinations(tickers, 2))
 
 
 def correlation_screen(
-    returns: pd.DataFrame,
-    pairs: list[tuple[str, str]],
-    min_corr: float,
-    excluded_pairs: list[tuple[str, str]] | None = None,
-) -> pd.DataFrame:
+    returns,
+    pairs,
+    min_corr,
+    excluded_pairs=None,
+):
     rows = []
     corr = returns.corr()
     excluded = {tuple(sorted(pair)) for pair in (excluded_pairs or [])}
@@ -42,7 +40,7 @@ def correlation_screen(
     return pd.DataFrame(rows, columns=columns).sort_values("correlation", ascending=False).reset_index(drop=True)
 
 
-def evaluate_pair(log_price_data: pd.DataFrame, y: str, x: str) -> dict:
+def evaluate_pair(log_price_data, y, x):
     pair = log_price_data[[y, x]].dropna()
     alpha, beta = estimate_hedge_ratio(pair[y], pair[x])
     spread = construct_spread(pair[y], pair[x], alpha, beta)
@@ -60,7 +58,7 @@ def evaluate_pair(log_price_data: pd.DataFrame, y: str, x: str) -> dict:
     }
 
 
-def select_best_pair(train_prices: pd.DataFrame, config: dict) -> dict:
+def select_best_pair(train_prices, config):
     min_corr = float(config.get("min_corr", 0.75))
     max_coint_pvalue = float(config.get("max_coint_pvalue", 0.05))
     max_adf_pvalue = float(config.get("max_adf_pvalue", 0.05))
@@ -76,10 +74,7 @@ def select_best_pair(train_prices: pd.DataFrame, config: dict) -> dict:
     log_price_data = np.log(train_prices)
     rows = []
     for row in screened.itertuples(index=False):
-        try:
-            evaluated = evaluate_pair(log_price_data, row.y, row.x)
-        except Exception:
-            continue
+        evaluated = evaluate_pair(log_price_data, row.y, row.x)
         evaluated["correlation"] = float(row.correlation)
         rows.append(evaluated)
 

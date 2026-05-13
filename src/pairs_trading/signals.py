@@ -1,9 +1,7 @@
-from __future__ import annotations
-
 import pandas as pd
 
 
-def rolling_zscore(spread: pd.Series, lookback: int) -> pd.Series:
+def rolling_zscore(spread, lookback):
     """Compute z-score using rolling statistics known before the current bar."""
     shifted = spread.shift(1)
     mean = shifted.rolling(lookback).mean()
@@ -14,17 +12,17 @@ def rolling_zscore(spread: pd.Series, lookback: int) -> pd.Series:
 
 
 def generate_positions(
-    zscore: pd.Series,
-    entry_z: float,
-    exit_z: float,
-    stop_z: float,
-    max_holding_days: int | None = 30,
-) -> pd.Series:
+    zscore,
+    entry_z,
+    exit_z,
+    stop_z,
+    max_holding_days=30,
+):
     """Generate desired close-of-day spread positions.
 
     1 means long spread, -1 means short spread, and 0 means flat.
     """
-    positions: list[int] = []
+    positions = []
     position = 0
     holding_days = 0
 

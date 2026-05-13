@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import argparse
 import copy
 from pathlib import Path
@@ -23,12 +21,12 @@ from pairs_trading.visualization import (
 )
 
 
-def load_yaml(path: str | Path) -> dict:
+def load_yaml(path):
     with Path(path).open("r", encoding="utf-8") as handle:
         return yaml.safe_load(handle) or {}
 
 
-def run_single_pair(prices, y: str = "TLT", x: str = "IEF", signal_config: dict | None = None, costs: dict | None = None) -> dict:
+def run_single_pair(prices, y="TLT", x="IEF", signal_config=None, costs=None):
     signal_config = signal_config or {}
     costs = costs or {}
     log_pair = np.log(prices[[y, x]])
@@ -46,9 +44,9 @@ def run_single_pair(prices, y: str = "TLT", x: str = "IEF", signal_config: dict 
 
 
 def run_full_pipeline(
-    universe_path: str | Path = "config/universe.yaml",
-    backtest_path: str | Path = "config/backtest.yaml",
-) -> dict:
+    universe_path="config/universe.yaml",
+    backtest_path="config/backtest.yaml",
+):
     universe = load_yaml(universe_path)
     config = load_yaml(backtest_path)
     run_config = copy.deepcopy(config)
@@ -69,19 +67,19 @@ def run_full_pipeline(
     return {"prices": prices, "single_pair": single_pair, "walk_forward": walk_forward}
 
 
-def _format_pct(value: float) -> str:
+def _format_pct(value):
     if pd.isna(value):
         return "n/a"
     return f"{value:.2%}"
 
 
-def _format_float(value: float) -> str:
+def _format_float(value):
     if pd.isna(value):
         return "n/a"
     return f"{value:.4f}"
 
 
-def _markdown_table(frame: pd.DataFrame) -> str:
+def _markdown_table(frame):
     if frame.empty:
         return "_No rows._"
     values = frame.map(lambda value: "n/a" if pd.isna(value) else str(value))
@@ -91,7 +89,7 @@ def _markdown_table(frame: pd.DataFrame) -> str:
     return "\n".join([header, separator, *rows])
 
 
-def _metrics_frame(metrics: dict) -> pd.DataFrame:
+def _metrics_frame(metrics):
     order = [
         "cumulative_return",
         "annualized_return",
@@ -130,7 +128,7 @@ def _metrics_frame(metrics: dict) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
-def _window_metrics(selected_pairs: pd.DataFrame) -> pd.DataFrame:
+def _window_metrics(selected_pairs):
     if selected_pairs.empty:
         return selected_pairs
     cols = [
@@ -151,15 +149,15 @@ def _window_metrics(selected_pairs: pd.DataFrame) -> pd.DataFrame:
 
 
 def _write_report(
-    prices: pd.DataFrame,
-    single_pair: dict,
-    walk_forward: dict,
-    single_metrics: pd.DataFrame,
-    wf_metrics: pd.DataFrame,
-    window_metrics: pd.DataFrame,
-    figure_paths: dict[str, str],
-    report_path: str | Path,
-) -> None:
+    prices,
+    single_pair,
+    walk_forward,
+    single_metrics,
+    wf_metrics,
+    window_metrics,
+    figure_paths,
+    report_path,
+):
     selected = walk_forward["selected_pairs"].copy()
     selected_display = selected.copy()
     for col in ["train_start", "train_end", "test_start", "test_end"]:
@@ -300,10 +298,10 @@ Run the test suite with:
 
 
 def generate_mvp_outputs(
-    universe_path: str | Path = "config/universe.yaml",
-    backtest_path: str | Path = "config/backtest.yaml",
-    reports_dir: str | Path = "reports",
-) -> dict:
+    universe_path="config/universe.yaml",
+    backtest_path="config/backtest.yaml",
+    reports_dir="reports",
+):
     reports_dir = Path(reports_dir)
     figures_dir = reports_dir / "figures"
     figures_dir.mkdir(parents=True, exist_ok=True)
@@ -366,7 +364,7 @@ def generate_mvp_outputs(
     }
 
 
-def main() -> None:
+def main():
     parser = argparse.ArgumentParser(description="Run the ETF pairs trading MVP pipeline.")
     parser.add_argument("--universe", default="config/universe.yaml")
     parser.add_argument("--backtest", default="config/backtest.yaml")
